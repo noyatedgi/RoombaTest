@@ -314,6 +314,35 @@ PROTO RoombaRobot [
         translation 0 0 0.08
       }
       
+      # Lidar Sensor for SLAM and Mapping
+      Lidar {
+        # מיקום: מרכז הרובוט (x=0, y=0), מוגבה מעט מעל הגוף הראשי
+        translation 0 0 0.09
+        rotation 0 0 1 0  # כיוון התחלתי קדימה
+        children [
+          # Lidar visual housing/tower
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.2 0.2 0.2
+              metalness 0.8
+              roughness 0.2
+            }
+            geometry Cylinder {
+              height 0.03
+              radius 0.025
+              subdivision 16
+            }
+          }
+        ]
+        name "lidar"  # שם ייחודי לגישה מהבקר
+        numberOfLayers 1  # סריקה דו-ממדית (שכבה אחת), מתאים לרובוט ניקיון
+        horizontalResolution 360  # 360 נקודות מדידה בסיבוב שלם (מדידה כל מעלה)
+        minRange 0.12  # טווח מינימלי (חיישנים לא רואים קרוב מדי)
+        maxRange 3.5  # טווח מקסימלי (3.5 מטר, מספיק לדירה)
+        noise 0.01  # הוספת רעש קטן למדידה לסימולציה מציאותית יותר
+        resolution -1  # מאפשר ל-Webots לחשב את הרזולוציה הזוויתית האופטימלית
+      }
+      
       # Extension slot for additional sensors
       Group {
         children IS extensionSlot
