@@ -151,10 +151,12 @@ PROTO RoombaRobot [
         }
       }
       
-      # Front proximity sensor (minimal for obstacle detection)
-      DEF DS_FRONT DistanceSensor {
-        translation 0.16 0 0.05
-        rotation 0 0 1 0
+      # Proximity sensors array (8 sensors arranged according to iRobot Roomba specification)
+      
+      # ps0 - 45° right (front-right diagonal)
+      DEF PS0 DistanceSensor {
+        translation 0.12 -0.12 0.05
+        rotation 0 0 1 -0.785398
         children [
           DEF SENSOR_SHAPE Shape {
             appearance PBRAppearance {
@@ -163,17 +165,121 @@ PROTO RoombaRobot [
               roughness 0.9
             }
             geometry Box {
-              size 0.01 0.01 0.01
+              size 0.008 0.008 0.008
             }
           }
         ]
-        name "ds_front"
+        name "ps0"
         lookupTable [
           0 0 0
-          1.5 1.5 0
+          0.8 0.8 0
         ]
-        type "sonar"
-        numberOfRays 3
+        type "infra-red"
+      }
+      
+      # ps1 - 20° right (front-right shoulder)
+      DEF PS1 DistanceSensor {
+        translation 0.15 -0.055 0.05
+        rotation 0 0 1 -0.349066
+        children [
+          USE SENSOR_SHAPE
+        ]
+        name "ps1"
+        lookupTable [
+          0 0 0
+          0.8 0.8 0
+        ]
+        type "infra-red"
+      }
+      
+      # ps2 - 0° (straight front - main collision avoidance)
+      DEF PS2 DistanceSensor {
+        translation 0.16 0 0.05
+        rotation 0 0 1 0
+        children [
+          USE SENSOR_SHAPE
+        ]
+        name "ps2"
+        lookupTable [
+          0 0 0
+          0.8 0.8 0
+        ]
+        type "infra-red"
+      }
+      
+      # ps3 - -20° left (front-left shoulder)
+      DEF PS3 DistanceSensor {
+        translation 0.15 0.055 0.05
+        rotation 0 0 1 0.349066
+        children [
+          USE SENSOR_SHAPE
+        ]
+        name "ps3"
+        lookupTable [
+          0 0 0
+          0.8 0.8 0
+        ]
+        type "infra-red"
+      }
+      
+      # ps4 - -45° left (front-left diagonal)
+      DEF PS4 DistanceSensor {
+        translation 0.12 0.12 0.05
+        rotation 0 0 1 0.785398
+        children [
+          USE SENSOR_SHAPE
+        ]
+        name "ps4"
+        lookupTable [
+          0 0 0
+          0.8 0.8 0
+        ]
+        type "infra-red"
+      }
+      
+      # ps5 - -90° left side (wall following - left)
+      DEF PS5 DistanceSensor {
+        translation 0 0.16 0.05
+        rotation 0 0 1 1.5708
+        children [
+          USE SENSOR_SHAPE
+        ]
+        name "ps5"
+        lookupTable [
+          0 0 0
+          0.8 0.8 0
+        ]
+        type "infra-red"
+      }
+      
+      # ps6 - -135° left-rear diagonal
+      DEF PS6 DistanceSensor {
+        translation -0.12 0.12 0.05
+        rotation 0 0 1 2.356194
+        children [
+          USE SENSOR_SHAPE
+        ]
+        name "ps6"
+        lookupTable [
+          0 0 0
+          0.8 0.8 0
+        ]
+        type "infra-red"
+      }
+      
+      # ps7 - 90° right side (wall following - right)
+      DEF PS7 DistanceSensor {
+        translation 0 -0.16 0.05
+        rotation 0 0 1 -1.5708
+        children [
+          USE SENSOR_SHAPE
+        ]
+        name "ps7"
+        lookupTable [
+          0 0 0
+          0.8 0.8 0
+        ]
+        type "infra-red"
       }
       
       # Front touch sensor (bump detection)
@@ -202,15 +308,9 @@ PROTO RoombaRobot [
         }
       }
       
-      # Compass for orientation
-      Compass {
-        name "compass"
-        translation 0 0 0.08
-      }
-      
-      # Gyro for angular velocity
-      Gyro {
-        name "gyro"
+      # Inertial Measurement Unit (IMU) - combines compass and gyro functionality
+      InertialUnit {
+        name "imu"
         translation 0 0 0.08
       }
       
